@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier Urbano - Catálogo Principal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .top-fixed-bar {
+            background-color: #222;
+            color: white;
+            padding: 8px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+        }
+
+        .top-fixed-bar.show-bar {
+            display: flex;
+            opacity: 1;
+        }
+
+        .top-fixed-bar .catalog-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .top-fixed-bar .dropdown-button {
+            background-color: transparent;
+            color: rgb(255, 255, 255);
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .top-fixed-bar .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #ffffff;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            left: 0;
+            top: 100%;
+        }
+
+        .top-fixed-bar .dropdown-content li a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .top-fixed-bar .dropdown-content li a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .top-fixed-bar .catalog-dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .barra-arriba {
+            background-color: #000000;
+            border-bottom: 0px solid #3cc283;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+        .header-left .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+            white-space: nowrap;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .main-categories {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .main-categories li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: color 0.2s ease, text-decoration 0.2s ease;
+        }
+
+        .main-categories li a:hover {
+            color: #007bff;
+            text-decoration:none;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 5px 10px;
+            background-color: #f9f9f9;
+            flex-grow: 1;
+            max-width: 400px;
+            margin: 10px;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            padding: 5px;
+            flex-grow: 1;
+            background-color: transparent;
+        }
+
+        .search-bar .search-icon {
+            color: #666;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .header-right {
+            font-weight:bold;
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+            flex-wrap: wrap;
+        }
+
+        .header-right a {
+            color: #ffffff;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: color 0.2s ease, text-decoration 0.2s ease;
+            cursor: pointer;
+        }
+
+        .header-right a:hover {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .main-nav {
+            display: none;
+        }
+
+
+        .hero-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            min-height: 450px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-images-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            display: none;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            transform: translateX(100%);
+        }
+
+        .carousel-image.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0%);
+        }
+        .carousel-image.slide-out-right {
+            transform: translateX(100%);
+        }
+        .carousel-image.slide-in-left {
+            transform: translateX(-100%);
+            opacity: 0;
+            display: block;
+        }
+        .carousel-image.slide-in-left.active {
+            transform: translateX(0%);
+            opacity: 1;
+        }
+
+
+        .hero-section .arrow {
+            font-size: 2em;
+            color: rgb(5, 5, 5);
+            background-color: rgba(131, 130, 130, 0.808);
+            padding: 9px 8px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            z-index: 10;
+            border-radius: 10%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1;
+        }
+
+        .hero-section .arrow:hover {
+            color: lightgray;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-section .prev-arrow {
+            margin-left: 20px;
+        }
+
+        .hero-section .next-arrow {
+            margin-right: 20px;
+        }
+
+
+        .services-bar {
+            background-color: #000000;
+            color: #333;
+            padding: 5px 40px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+            border-top: 0px solid #d40000;
+            margin-top: 0px;
+            flex-wrap: wrap;
+        }
+
+        .service-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+        }
+
+        .service-item .icon {
+            font-size: 2em;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .service-button {
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .service-button:hover {
+            background-color: #0056b3;
+        }
+
+
+        .categories-preview {
+            padding: 40px 20px;
+            background-color: #fff;
+            text-align: center;
+        }
+
+        .categories-preview h2 {
+            font-size: 2.2em;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category-item {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid #eee;
+        }
+
+        .category-item h3 {
+            font-size: 1.4em;
+            margin: 15px 0;
+            padding: 0 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .category-item p {
+            font-size: 0.9em;
+            color: #666;
+            padding: 0 10px 15px;
+            flex-grow: 1;
+        }
+
+        .category-item .view-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 10px 15px;
+            display: inline-block; 
+            transition: background-color 0.3s ease;
+        }
+
+        .category-item .view-button:hover {
+            background-color: #0056b3;
+        }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            background-color: #fff;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .modal-close-button {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-close-button:hover,
+        .modal-close-button:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        .modal-body {
+            padding: 0;
+        }
+
+        .modal-image-container {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .modal-form {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .modal-form input[type="text"],
+        .modal-form input[type="email"],
+        .modal-form input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .modal-form .form-links {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .modal-form .form-links a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .modal-form .form-links a:hover {
+            text-decoration: underline;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 0px 20px 20px 20px;
+        }
+
+        .modal-actions button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .modal-actions .cancel-button {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .modal-actions .primary-button {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .modal-actions .cancel-button:hover {
+            background-color: #bbb;
+        }
+
+        .modal-actions .primary-button:hover {
+            background-color: #0056b3;
+        }
+
+        .main-footer {
+            background-color: #000000;
+            color: #f8f8f8;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            border-top: 5px solid #007bff; 
+        }
+
+        .footer-section h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            text-transform: uppercase;
+        }
+
+        .footer-section p,
+        .footer-section ul {
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a {
+            color: #f8f8f8;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #007bff;
+        }
+
+        .social-icons a {
+            color: #f8f8f8;
+            font-size: 1.5em;
+            margin-right: 15px;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .social-icons a:hover {
+            color: #007bff;
+        }
+
+        @media (max-width: 900px) {
+            .header-left {
+                align-items: center;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .header-top {
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+            }
+            .main-categories {
+                justify-content: center;
+                width: 100%;
+                margin-top: 5px;
+            }
+            .search-bar {
+                width: 90%;
+                max-width: none;
+                margin: 10px 0;
+            }
+            .header-right {
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .top-fixed-bar {
+                justify-content: center;
+                padding: 5px 10px;
+            }
+            .services-bar {
+                flex-direction: column;
+                margin-top: 0;
+            }
+            .service-item {
+                margin-bottom: 15px;
+            }
+            .hero-section {
+                min-height: 250px;
+            }
+            .hero-section .arrow {
+                font-size: 3em;
+                padding: 5px 10px;
+            }
+            .main-footer {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .footer-section {
+                margin-bottom: 20px;
+            }
+            .social-icons {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-fixed-bar" id="catalogBar">
+        <div class="catalog-dropdown">
+            <button class="dropdown-button">CATÁLOGO</button>
+            <ul class="dropdown-content">
+                <li><a href="#">ROPA</a></li>
+                <li><a href="#">PERFUMES</a></li>
+                <li><a href="#">MUJER</a></li>
+                <li><a href="#">HOMBRE</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <header class="barra-arriba">
+        <div class="header-top">
+            <div class="header-left">
+                <a href="#" class="logo">Atelier Urbano</a>
+                <ul class="main-categories">
+                    <li><a href="hombre.html">HOMBRES</a></li>
+                    <li><a href="mujer.html">MUJERES</a></li>
+                    <li><a href="perfumes.html">PERFUMES</a></li>
+                </ul>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" placeholder="BUSCAR">
+                <span class="search-icon">&#128269;</span>
+            </div>
+
+            <div class="header-right">
+                <a href="contacto.html">Contacto</a>
+                <a href="ayuda.html">Ayuda</a>
+                <a id="openRegisterModal">Crea tu cuenta</a> <a id="openLoginModal">Ingresa</a> <a href="mis_compras.html">Mis compras</a>
+            </div>
+        </div>
+        <nav class="main-nav"></nav>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <i class="fas fa-chevron-left arrow prev-arrow"></i>
+            <div class="carousel-images-container">
+                <img src="https://www.decantx.com/cdn/shop/collections/full_size_bottle_1200x1200.jpg?v=1609180080" alt="Ofertas de verano" class="carousel-image active">
+                <img src="https://picsum.photos/id/1016/1600/600" alt="Nuevas colecciones" class="carousel-image">
+                <img src="https://picsum.photos/id/1018/1600/600" alt="Envío gratis" class="carousel-image">
+                <img src="https://picsum.photos/id/1020/1600/600" alt="Promoción especial" class="carousel-image">
+            </div>
+            <i class="fas fa-chevron-right arrow next-arrow"></i>
+        </section>
+
+        <div class="services-bar">
+            <div class="service-item">
+                <span class="icon">🏷️</span>
+                <a href="descuentos.html" class="service-button">DESCUENTOS</a>
+            </div>
+            <div class="service-item">
+                <span class="icon">🚚</span>
+                <a href="envios.html" class="service-button">ENVÍOS</a>
+            </div>
+            <div class="service-item">
+                <span class="icon">💳</span>
+                <a href="metodos_pago.html" class="service-button">MÉTODOS DE PAGO</a>
+            </div>
+        </div>
+
+        <section class="categories-preview">
+            <h2>Explora Nuestras Categorías</h2>
+            <div class="categories-grid">
+                <a href="hombre.html" class="category-item">
+                    <img src="https://www.palenciaenlared.es/wp-content/uploads/2021/10/gaban-1.jpg" alt="Ropa de Hombres">
+                    <h3>HOMBRES</h3>
+                    <p>Descubre lo último en moda masculina, desde casual hasta formal.</p>
+                    <span class="view-button">VER MÁS</span>
+                </a>
+                <a href="mujer.html" class="category-item">
+                    <img src="https://www.infotextil.com.ar/wp-content/uploads/2024/03/b-20.jpg" alt="Ropa de Mujeres">
+                    <h3>MUJERES</h3>
+                    <p>Las tendencias más actuales para cada estilo y ocasión.</p>
+                    <span class="view-button">VER MÁS</span>
+                </a>
+                <a href="gorras.html" class="category-item">
+                    <img src="https://i.pinimg.com/564x/94/89/aa/9489aa474e73f559fdf07f70fc8cf5b7.jpg" alt="Gorras">
+                    <h3>GORRAS</h3>
+                    <p>El accesorio perfecto para completar tu look urbano.</p>
+                    <span class="view-button">VER MÁS</span>
+                </a>
+                <a href="perfumes.html" class="category-item">
+                    <img src="https://static.vecteezy.com/system/resources/previews/033/544/320/non_2x/kharkiv-ukraine-january-2-2021-many-fragrance-perfume-bottles-of-various-famous-brands-of-perfume-manufacturers-on-dark-background-free-photo.JPG" alt="Perfumes">
+                    <h3>PERFUMES</h3>
+                    <p>Fragancias exclusivas para él y para ella, captura tu esencia.</p>
+                    <span class="view-button">VER MÁS</span>
+                </a>
+            </div>
+        </section>
+
+        </main>
+
+    <footer class="main-footer">
+        <div class="footer-section">
+            <h3>Contacto</h3>
+            <p><i class="fas fa-map-marker-alt"></i> Calle Falsa 123, Mendoza, Argentina</p>
+            <p><i class="fas fa-phone"></i> +54 9 261 555-1234</p>
+            <p><i class="fas fa-envelope"></i> info@atelierurbano.com</p>
+        </div>
+        <div class="footer-section">
+            <h3>Síguenos</h3>
+            <div class="social-icons">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="footer-section">
+            <h3>Información</h3>
+            <ul>
+                <li><a href="acerca-de.html">Acerca de Nosotros</a></li>
+                <li><a href="politicas.html">Políticas de Privacidad</a></li>
+                <li><a href="terminos.html">Términos y Condiciones</a></li>
+                <li><a href="preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Mi Cuenta</h3>
+            <ul>
+                <li><a href="mis_compras.html">Mis Compras</a></li>
+                <li><a id="footerOpenLogin">Ingresar</a></li>
+                <li><a id="footerOpenRegister">Crear Cuenta</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Ingresar a mi cuenta</h2>
+                <span class="modal-close-button login-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-image-container">
+                    <img id="loginAdImage" src="https://javiercordero.com/wp-content/uploads/frases-descuentos-promociones-foto001.jpg" alt="Regístrate y obtén 2 cupones de $2.000!" class="modal-image">
+                </div>
+                <div class="modal-form">
+                    <input type="email" placeholder="E-mail">
+                    <input type="password" placeholder="Contraseña">
+                    <div class="form-links">
+                        <a id="switchToRegisterFromLogin">Crear una cuenta</a> <a href="olvide_contrasena.html">Olvidé mi contraseña</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="cancel-button login-cancel">Cerrar</button>
+                <button class="primary-button">Ingresar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Crea tu cuenta</h2>
+                <span class="modal-close-button register-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-image-container">
+                    <img id="registerAdImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIHTAGxgr7nkmDvEZCX9TnQVoxzeTKnchWjQ&s" alt="Bienvenido a nuestra comunidad!" class="modal-image">
+                </div>
+                <div class="modal-form">
+                    <input type="text" placeholder="Nombre completo">
+                    <input type="email" placeholder="E-mail">
+                    <input type="password" placeholder="Contraseña">
+                    <input type="password" placeholder="Confirmar contraseña">
+                    <div class="form-links">
+                        <a id="switchToLoginFromRegister">Ya tengo una cuenta</a> </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="cancel-button register-cancel">Cerrar</button>
+                <button class="primary-button">Registrarse</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const catalogBar = document.getElementById('catalogBar');
+            const scrollThreshold = 200;
+
+            if (window.scrollY > scrollThreshold) {
+                catalogBar.classList.add('show-bar');
+            } else {
+                catalogBar.classList.remove('show-bar');
+            }
+        });
+
+        const images = document.querySelectorAll('.carousel-image');
+        const prevArrow = document.querySelector('.prev-arrow');
+        const nextArrow = document.querySelector('.next-arrow');
+        let currentIndex = 0;
+        let isAnimating = false;
+        let autoSlideInterval; 
+
+        function showImage(index, direction) {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+            }
+
+            const prevImage = images[currentIndex];
+            const nextImage = images[index];
+
+            if (direction === 'next') {
+                nextImage.style.transform = 'translateX(100%)';
+            } else if (direction === 'prev') {
+                nextImage.style.transform = 'translateX(-100%)';
+            } else {
+                nextImage.style.transform = 'translateX(0%)';
+            }
+
+            nextImage.style.opacity = '0';
+            nextImage.style.display = 'block';
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    if (prevImage && prevImage !== nextImage) {
+                        if (direction === 'next') {
+                            prevImage.style.transform = 'translateX(-100%)';
+                        } else if (direction === 'prev') {
+                            prevImage.style.transform = 'translateX(100%)';
+                        }
+                        prevImage.style.opacity = '0';
+                    }
+
+                    nextImage.style.transform = 'translateX(0%)';
+                    nextImage.style.opacity = '1';
+                });
+            });
+            if (prevImage && prevImage !== nextImage) {
+                prevImage.classList.remove('active');
+            }
+            nextImage.classList.add('active');
+
+            currentIndex = index;
+
+            setTimeout(() => {
+                images.forEach((img, i) => {
+                    if (i !== currentIndex) {
+                        img.style.display = 'none';
+                        img.style.transform = 'translateX(100%)';
+                    }
+                });
+                isAnimating = false;
+                startAutoSlide();
+            }, 500);
+        }
+
+        function nextImage() {
+            let nextIndex = (currentIndex + 1) % images.length;
+            showImage(nextIndex, 'next');
+        }
+
+        function prevImage() {
+            let prevIndex = (currentIndex - 1 + images.length) % images.length;
+            showImage(prevIndex, 'prev');
+        }
+
+        nextArrow.addEventListener('click', nextImage);
+        prevArrow.addEventListener('click', prevImage);
+
+        images[currentIndex].style.display = 'block';
+        images[currentIndex].style.opacity = '1';
+        images[currentIndex].style.transform = 'translateX(0%)';
+
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(nextImage, 4000);
+        }
+
+        startAutoSlide();
+
+        const loginModal = document.getElementById('loginModal');
+        const registerModal = document.getElementById('registerModal');
+
+        const openLoginModalBtn = document.getElementById('openLoginModal');
+        const openRegisterModalBtn = document.getElementById('openRegisterModal');
+
+        const footerOpenLoginBtn = document.getElementById('footerOpenLogin');
+        const footerOpenRegisterBtn = document.getElementById('footerOpenRegister');
+
+
+        const closeLoginModalBtn = document.querySelector('.login-close');
+        const cancelLoginBtn = document.querySelector('.login-cancel');
+
+        const closeRegisterModalBtn = document.querySelector('.register-close');
+        const cancelRegisterBtn = document.querySelector('.register-cancel');
+
+        const switchToRegisterLink = document.getElementById('switchToRegisterFromLogin');
+        const switchToLoginLink = document.getElementById('switchToLoginFromRegister');
+
+        function openModal(modal) {
+            modal.style.display = 'flex';
+        }
+
+        function closeModal(modal) {
+            modal.style.display = 'none';
+        }
+
+        openLoginModalBtn.addEventListener('click', () => {
+            closeModal(registerModal); 
+            openModal(loginModal);
+        });
+
+        openRegisterModalBtn.addEventListener('click', () => {
+            closeModal(loginModal); 
+            openModal(registerModal);
+        });
+
+        if (footerOpenLoginBtn) { 
+            footerOpenLoginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                closeModal(registerModal);
+                openModal(loginModal);
+            });
+        }
+
+        if (footerOpenRegisterBtn) { 
+            footerOpenRegisterBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                closeModal(loginModal);
+                openModal(registerModal);
+            });
+        }
+
+        closeLoginModalBtn.addEventListener('click', () => closeModal(loginModal));
+        cancelLoginBtn.addEventListener('click', () => closeModal(loginModal));
+
+        closeRegisterModalBtn.addEventListener('click', () => closeModal(registerModal));
+        cancelRegisterBtn.addEventListener('click', () => closeModal(registerModal));
+
+        window.addEventListener('click', (event) => {
+            if (event.target == loginModal) {
+                closeModal(loginModal);
+            }
+            if (event.target == registerModal) {
+                closeModal(registerModal);
+            }
+        });
+
+        switchToRegisterLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeModal(loginModal);
+            openModal(registerModal);
+        });
+
+        switchToLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeModal(registerModal);
+            openModal(loginModal);
+        });
+
+        setInterval(nextImage, 4000);
+    </script>
+
+</body>
+</html>
