@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0beta3/css/all.min.css">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Hombres - Atelier Urbano</title>
+    <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <header class="header-main">
+            <div class="header-top">
+                <div class="logo-main"> <a href="paginaprincipal.html">ATELIER URBANO</a> </div>
+            </div>
+        </div>
+        <nav class="main-categories">
+            <button type="button" type="catalogoButton" class="category-btn">Catálogo ▼</button>
+            <a href="hombres.html" class="category-link active">Hombres</a>
+            <a href="" class="category-link">Mujeres</a>
+            <a href="" class="category-link">Perfumes</a>
+            <a href="" class="category-link">Gorras</a>
+
+            <button id="cartMenuButton" class="category-btn cart-menu-btn">
+                <i class="fas fa-shopping-cart"></i> Mis Compras (<span id="cartCount">0</span>)
+            </button>
+
+            <a href="pruebas.html" class="category-link">Volver al menu</a>
+        </nav>
+
+        <div id="megasearchDropdown" class="megasearch-dropdown">
+        </div>
+
+    </header>
+
+    <main class="catalogo-hombres-main">
+        <h1>Catálogo de Ropa para Hombres</h1>
+
+        <div class="catalogo-filtros">
+            <div class="filtro-group">
+                <label for="orden-precio">Ordenar por Precio:</label>
+                <select id="orden-precio">
+                    <option value="default">Relevancia</option>
+                    <option value="mayor">Mayor a Menor</option>
+                    <option value="menor">Menor a Mayor</option>
+                </select>
+            </div>
+
+            <div class="filtro-group">
+                <label for="filtro-talle">Filtrar por Talle:</label>
+                <select id="filtro-talle">
+                    <option value="all">Todos</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                </select>
+            </div>
+        </div>
+
+        <section id="productos-hombres" class="productos-grid">
+        </section>
+    </main>
+
+    <script src="hombresjava.js"></script>
+
+    <div id="shoppingCartPanel" class="cart-panel">
+        <div class="cart-header">
+            <h2><i class="fas fa-shopping-cart"></i> Tu Carrito</h2>
+            <button id="closeCartButton" class="close-btn">&times;</button>
+        </div>
+        <div id="cartItems" class="cart-items">
+            <p>Tu carrito está vacío.</p>
+        </div>
+        <div class="cart-summary">
+            <p>Total: <span id="cartTotal">$0 ARS</span></p>
+            <button class="checkout-btn">Finalizar Compra</button>
+        </div>
+    </div>
+    <div id="cartOverlay" class="cart-overlay"></div>
+</body>
+
+</html>
